@@ -1,0 +1,13 @@
+{
+  "domain": "indicators",
+  "name": "Indicators Image",
+  "documentation": "https://github.com/kvj/hass_Indicators_Helper",
+  "issue_tracker": "https://github.com/kvj/hass_Indicators_Helper/issues",
+  "dependencies": [],
+  "codeowners": ["@kvj"],
+  "requirements": ["Pillow>=10.2.0"],
+  "iot_class": "calculated",
+  "config_flow": true,
+  "integration_type": "helper",
+  "version": "0.1.0"
+}

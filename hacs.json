@@ -1,0 +1,5 @@
+{
+    "name": "Indicators Image",
+    "domains": ["image"],
+    "render_readme": true
+}

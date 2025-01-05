@@ -1,0 +1,54 @@
+{
+  "title": "Indicators Image",
+  "config": {
+    "step": {
+      "user": {
+        "title": "New Indicators Image",
+        "data": {
+          "name": "Name",
+          "rows": "Rows",
+          "cols": "Columns",
+          "size": "Indicator size",
+          "gap": "Gap between indicators",
+          "padding": "Image padding",
+          "shape": "Indicator shape",
+          "bg_color": "Background color",
+          "bg_transp": "Transparent background",
+          "off_color": "OFF indicator color",
+          "off_transp": "Transparent OFF indicator",
+          "on_color": "ON indicator color",
+          "template": "Indicator matrix YAML template"
+        }
+      }
+    },
+    "error": {
+      "invalid_yaml": "Invalid YAML configuration"
+    }
+  },
+  "issues": {
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Indicators Image configuration",
+        "data": {
+          "rows": "Rows",
+          "cols": "Columns",
+          "size": "Indicator size",
+          "gap": "Gap between indicators",
+          "padding": "Image padding",
+          "shape": "Indicator shape",
+          "bg_color": "Background color",
+          "bg_transp": "Transparent background",
+          "off_color": "OFF indicator color",
+          "off_transp": "Transparent OFF indicator",
+          "on_color": "ON indicator color",
+          "template": "Indicator matrix YAML template"
+        }
+      }
+    },
+    "error": {
+      "invalid_yaml": "Invalid YAML configuration"
+    }
+  }
+}
