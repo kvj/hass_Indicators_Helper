@@ -48,6 +48,9 @@ OPTIONS_SCHEMA = vol.Schema({
     vol.Required(CONF_OFF_COLOR, description={"suggested_value": [0x21, 0x21, 0x21]}): selector({"color_rgb": {}}),
     vol.Required(CONF_OFF_TRANSP, description={"suggested_value": False}): selector({"boolean": {}}),
     vol.Required(CONF_ON_COLOR, description={"suggested_value": [0xFF, 0xEB, 0x3B]}): selector({"color_rgb": {}}),
+    vol.Required(CONF_ON_ICON_COLOR, description={"suggested_value": [0x00, 0x00, 0x00]}): selector({"color_rgb": {}}),
+    vol.Required(CONF_OFF_ICON_COLOR, description={"suggested_value": [0xFF, 0xFF, 0xFF]}): selector({"color_rgb": {}}),
+    vol.Required(CONF_RENDER_ICONS, description={"suggested_value": False}): selector({"boolean": {}}),
     vol.Required(CONF_TEMPLATE, description={"suggested_value": DEF_TEMPLATE}): selector({"template": {}}),
 })
 

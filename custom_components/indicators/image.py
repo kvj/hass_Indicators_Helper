@@ -21,7 +21,7 @@ async def async_setup_entry(hass, entry, add_entities):
     return True
 
 
-class _Entity(CoordinatorEntity, ImageEntity):
+class _Entity(CoordinatorEntity[Coordinator], ImageEntity):
 
     def __init__(self, coordinator: Coordinator):
         super().__init__(coordinator)
@@ -35,14 +35,29 @@ class _Entity(CoordinatorEntity, ImageEntity):
     def image_last_updated(self):
         return self.coordinator.data.get("last_update")
 
+    @property
+    def state_attributes(self):
+        super_value = super().state_attributes
+        return {
+            **(super_value if super_value else {}),
+            "columns": int(self.coordinator._config[CONF_COLS]),
+            "rows": int(self.coordinator._config[CONF_ROWS]),
+            "padding": int(self.coordinator._config[CONF_PADDING]),
+            "gap": int(self.coordinator._config[CONF_GAP]),
+            "size": int(self.coordinator._config[CONF_SIZE]),
+        }
+
+
     async def async_image(self) -> bytes | None:
-        pixels = await self.coordinator.async_build()
+        with_icons = self.coordinator._config.get(CONF_RENDER_ICONS, False)
 
         cols = int(self.coordinator._config[CONF_COLS])
         rows = int(self.coordinator._config[CONF_ROWS])
         padding = int(self.coordinator._config[CONF_PADDING])
         gap = int(self.coordinator._config[CONF_GAP])
         size = int(self.coordinator._config[CONF_SIZE])
+
+        icon_size = int(size * 0.7)
 
         width = 2 * padding + gap * (cols - 1) + size * cols;
         height = 2 * padding + gap * (rows - 1) + size * rows;
@@ -52,6 +67,8 @@ class _Entity(CoordinatorEntity, ImageEntity):
 
         shape = self.coordinator._config[CONF_SHAPE]
 
+        pixels = await self.coordinator.async_build()
+
         img = Image.new("RGBA", (width, height), bg_color)
         draw = ImageDraw.Draw(img)
 
@@ -59,17 +76,27 @@ class _Entity(CoordinatorEntity, ImageEntity):
             row = pixels[j]
             y = padding + (size + gap) * j
             for i in range(len(row)):
-                x = padding + (size + gap) * i
 
-                col = off_color if row[i] is None else row[i]
+                _LOGGER.debug(f"async_image: {row[i]}, {i}")
+                x = padding + (size + gap) * i
+                col = off_color if not row[i] or row[i][0] is None else row[i][0]
                 col_ = ImageColor.getrgb(col) if isinstance(col, str) else col
-                # _LOGGER.debug(f"async_image: {col}, {col_}")
                 if shape == CONF_SHAPE_SQ:
                     draw.rectangle([x, y, x + size, y + size], fill=tuple(col_))
                 elif shape == CONF_SHAPE_RS:
                     draw.rounded_rectangle([x, y, x + size, y + size], radius=gap, fill=tuple(col_))
                 elif shape == CONF_SHAPE_CL:
                     draw.circle([int(x + size / 2), int(y + size / 2)], radius=int(size / 2), fill=tuple(col_))
+                if with_icons and row[i] and row[i][1]:
+                    icon_, icon_size_, icon_color_ = row[i][1]
+                    icon_size_ = icon_size_ if icon_size_ else icon_size
+                    icon_color_ = icon_color_ + [0xff] if icon_color_ else (0, 0, 0, 0xff)
+                    _LOGGER.debug(f"async_image: draw_icon {icon_}, {icon_size_}, {icon_color_}")
+                    self.coordinator._mdi_font.draw_icon(
+                        draw, icon_, icon_size_,
+                        int(x + size / 2), int(y + size / 2),
+                        tuple(icon_color_),
+                    )
         img_bytes = io.BytesIO()
         img.save(img_bytes, format="png")
         return img_bytes.getvalue()

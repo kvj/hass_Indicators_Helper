@@ -17,6 +17,9 @@
           "off_color": "OFF indicator color",
           "off_transp": "Transparent OFF indicator",
           "on_color": "ON indicator color",
+          "render_icons": "Render entity icons",
+          "on_icon_color": "ON icon color",
+          "off_icon_color": "OFF icon color",
           "template": "Indicator matrix YAML template"
         }
       }
@@ -43,6 +46,9 @@
           "off_color": "OFF indicator color",
           "off_transp": "Transparent OFF indicator",
           "on_color": "ON indicator color",
+          "render_icons": "Render entity icons",
+          "on_icon_color": "ON icon color",
+          "off_icon_color": "OFF icon color",
           "template": "Indicator matrix YAML template"
         }
       }

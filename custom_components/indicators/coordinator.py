@@ -15,6 +15,7 @@ from homeassistant.const import (
 
 
 from .constants import *
+from .mdi_font import GlyphProvider
 
 import logging
 from datetime import datetime
@@ -28,16 +29,21 @@ class Coordinator(DataUpdateCoordinator):
             hass,
             _LOGGER,
             name=DOMAIN,
+            setup_method=self._async_setup,
             update_method=self._async_update,
         )
         self._entry = entry
         self._entry_id = entry.entry_id
         self._on_entity_state_handler = None
+        self._mdi_font = GlyphProvider()
 
     def _disable_listener(self, listener):
         if listener:
             listener()
         return None
+
+    async def _async_setup(self):
+        await self.hass.async_add_executor_job(self._mdi_font.init)
 
     async def _async_update(self):
         return {}
@@ -75,24 +81,31 @@ class Coordinator(DataUpdateCoordinator):
 
     async def _async_build_value(self, item):
         if not item or item is False or item == "" or item == 0:
-            return None
+            return (None, None)
         state = None
         if "entity_id" in item:
             state = self.hass.states.get(item["entity_id"])
         value = state.state if state else "off"
-        if "value_template"in item:
-            tmpl = template.Template(item["value_template"], self.hass)
-            value = template.render_complex(tmpl, {"state": state})
+        icon = item.get("icon", state.attributes.get("icon") if state else None)
+        if "value_template" in item:
+            value = template.render_complex(template.Template(item["value_template"], self.hass), {"state": state})
         is_on = value == "on" or value is True
+        icon_color_ = self._config.get(CONF_ON_ICON_COLOR) if is_on else self._config.get(CONF_OFF_ICON_COLOR)
+        icon_value = [icon, item.get("icon_size"), item.get("icon_color", icon_color_)]
+
+        if "icon_template" in item:
+            icon_value[0] = template.render_complex(template.Template(item["icon_template"], self.hass), {"state": state})
+        if "icon_color_template" in item:
+            if value_ := template.render_complex(template.Template(item["icon_color_template"], self.hass), {"state": state}):
+                icon_value[2] = value_
         if not is_on:
-            return None
+            return (None, icon_value)
         color = item.get("color", tuple(self._config[CONF_ON_COLOR]))
         if "color_template" in item:
-            tmpl = template.Template(item["color_template"], self.hass)
-            color = template.render_complex(tmpl, {"state": state})
+            color = template.render_complex(template.Template(item["color_template"], self.hass), {"state": state})
         if not color:
-            return None
-        return color
+            return (None, icon_value)
+        return (color, icon_value)
 
     async def async_build(self):
         result = [[None for _ in range(int(self._config[CONF_COLS]))] for _ in range(int(self._config[CONF_ROWS]))]
