@@ -33,6 +33,7 @@ OPTIONS_SCHEMA = vol.Schema({
     vol.Required(CONF_ROWS, description={"suggested_value": 5}): selector({"number": {"min": 1, "max": 99}}),
     vol.Required(CONF_COLS, description={"suggested_value": 5}): selector({"number": {"min": 1, "max": 99}}),
     vol.Required(CONF_SIZE, description={"suggested_value": 50}): selector({"number": {"min": 5, "max": 200, "unit_of_measurement": "px"}}),
+    vol.Required(CONF_RATIO, description={"suggested_value": 1}): selector({"number": {"min": 0, "max": 10, "step": 0.1}}),
     vol.Required(CONF_GAP, description={"suggested_value": 5}): selector({"number": {"min": 0, "max": 100, "unit_of_measurement": "px"}}),
     vol.Required(CONF_PADDING, description={"suggested_value": 5}): selector({"number": {"min": 0, "max": 100, "unit_of_measurement": "px"}}),
     vol.Required(CONF_SHAPE, description={"suggested_value": CONF_SHAPE_SQ}): selector({"select": {
@@ -51,6 +52,7 @@ OPTIONS_SCHEMA = vol.Schema({
     vol.Required(CONF_ON_ICON_COLOR, description={"suggested_value": [0x00, 0x00, 0x00]}): selector({"color_rgb": {}}),
     vol.Required(CONF_OFF_ICON_COLOR, description={"suggested_value": [0xFF, 0xFF, 0xFF]}): selector({"color_rgb": {}}),
     vol.Required(CONF_RENDER_ICONS, description={"suggested_value": False}): selector({"boolean": {}}),
+    vol.Required(CONF_TEXT_MODE, description={"suggested_value": False}): selector({"boolean": {}}),
     vol.Required(CONF_TEMPLATE, description={"suggested_value": DEF_TEMPLATE}): selector({"template": {}}),
 })
 

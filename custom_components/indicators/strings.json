@@ -20,7 +20,9 @@
           "render_icons": "Render entity icons",
           "on_icon_color": "ON icon color",
           "off_icon_color": "OFF icon color",
-          "template": "Indicator matrix YAML template"
+          "template": "Indicator matrix YAML template",
+          "ratio": "Aspect ratio",
+          "text_mode": "Color icons, not background"
         }
       }
     },
@@ -49,7 +51,9 @@
           "render_icons": "Render entity icons",
           "on_icon_color": "ON icon color",
           "off_icon_color": "OFF icon color",
-          "template": "Indicator matrix YAML template"
+          "template": "Indicator matrix YAML template",
+          "ratio": "Aspect ratio",
+          "text_mode": "Color icons, not background"
         }
       }
     },

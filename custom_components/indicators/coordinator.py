@@ -108,7 +108,7 @@ class Coordinator(DataUpdateCoordinator):
         return (color, icon_value)
 
     async def async_build(self):
-        result = [[None for _ in range(int(self._config[CONF_COLS]))] for _ in range(int(self._config[CONF_ROWS]))]
+        result = [[(None, None) for _ in range(int(self._config[CONF_COLS]))] for _ in range(int(self._config[CONF_ROWS]))]
         rows = self._config[CONF_TEMPLATE_YAML].get("rows", [])
         for j in range(len(rows)):
             cols = rows[j].get("cols", [])
